@@ -36,10 +36,7 @@ debconf.
 .. note::
 
     If no root password is provided in the pillar, a random one will
-    be created. As-of Hydrogen, this password uses the Python ``random``
-    module via ``test.rand_str``. As ``random`` is considered
-    cryptographically insecure, future formula versions should use the
-    newly available ``random.get_str`` method.
+    be created.
 
 ``mysql.database``
 ------------------

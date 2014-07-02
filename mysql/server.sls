@@ -2,7 +2,20 @@
 
 {% set os = salt['grains.get']('os', None) %}
 {% set os_family = salt['grains.get']('os_family', None) %}
-{% set mysql_root_password = salt['pillar.get']('mysql:server:root_password', salt['test.rand_str'](64)) %}
+
+{% if 'mysql:server:root_password' in pillar %}
+    {% set mysql_root_password = pillar['mysql:server:root_password'] %}
+{% else %}
+mysql_missing_root_password:
+  test.configurable_test_state:
+    - name: mysql_missing_root_password
+    - changes: False
+    - result: False
+    - comment: 'MySQL pillar is missing root password data. A random password will be used.'
+    - order: 1
+
+    {% set mysql_root_password = salt['random.get_str'](64) %}
+{% endif %}
 
 {% if os in ['Ubuntu', 'Debian'] %}
 mysql_debconf:
